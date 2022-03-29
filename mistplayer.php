@@ -12,16 +12,16 @@ Author:       MistServer team
 Author URI:   https://www.mistserver.org
 License:      Unlicense
 */
-
-
 // Make sure we don't expose any info if called directly
+
+
 if ( !function_exists( 'add_action' ) ) {
 	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
 	exit;
 }
 
 function dbi_add_settings_page() {
-  add_options_page( 'MistPlayer', 'MistPlayer', 'manage_options', 'dbi-example-plugin', 'dbi_render_plugin_settings_page' );
+  add_options_page( 'MistPlayer', 'MistPlayer', 'manage_options', 'mistplayer_defaults', 'dbi_render_plugin_settings_page' );
 }
 add_action( 'admin_menu', 'dbi_add_settings_page' );
 
@@ -29,10 +29,10 @@ function dbi_render_plugin_settings_page() {
   ?>
   <h2>Set MistPlayer plugin default settings</h2>
   <form action="options.php" method="post">
-      <?php 
-      settings_fields( 'mistplayer_defaults' );
-      do_settings_sections( 'dbi_example_plugin' ); ?>
-      <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Save' ); ?>" />
+    <?php 
+    settings_fields( 'mistplayer_defaults' );
+    do_settings_sections( 'dbi_example_plugin' ); ?>
+    <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Save' ); ?>" />
   </form>
   <?php
 }
@@ -41,43 +41,56 @@ function dbi_register_settings() {
   register_setting( 'mistplayer_defaults', 'mistplayer_defaults', 'mistplayer_defaults_validate' );
   add_settings_section( 'mistplayer_settings', '', 'dbi_plugin_section_text', 'dbi_example_plugin' );
 
-  add_settings_field( 'dbi_plugin_setting_http', 'HTTP host <span style="color:grey;font-weight:normal;">(for instance: example.com:8080 or example.com/mistserver)</span>', 'dbi_plugin_setting_http', 'dbi_example_plugin', 'mistplayer_settings' );
+  add_settings_field( 'dbi_plugin_setting_http', '<span style="color:grey;">HTTP host (required)</span>', 'dbi_plugin_setting_http', 'dbi_example_plugin', 'mistplayer_settings' );
 
-  add_settings_field( 'dbi_plugin_setting_https', 'https host ( example: our_website:4433 )', 'dbi_plugin_setting_https', 'dbi_example_plugin', 'mistplayer_settings' );
-  // how do we display a list of all options of the player 
-  add_settings_field( 'dbi_plugin_setting_opts', 'options( example: {width: 300, mute: true} ) <a href="https://mistserver.org/guides/latest">List of all options</a>', 'dbi_plugin_setting_opts', 'dbi_example_plugin', 'mistplayer_settings' );
-  add_settings_field( 'dbi_plugin_setting_loadbalancer', 'load balancer URL address ( example: http://hostname:8045 )', 'dbi_plugin_setting_loadbalancer', 'dbi_example_plugin', 'mistplayer_settings' );
+  add_settings_field( 'dbi_plugin_setting_https', '<span style="color:grey;">HTTPS host</span>', 'dbi_plugin_setting_https', 'dbi_example_plugin', 'mistplayer_settings' );
+
+  add_settings_field( 'dbi_plugin_setting_opts', '<span style="color:grey;">Options</span>', 'dbi_plugin_setting_opts', 'dbi_example_plugin', 'mistplayer_settings' );
+
+  add_settings_field( 'dbi_plugin_setting_loadbalancer', '<span style="color:grey;">Load balancer URL address</span>', 'dbi_plugin_setting_loadbalancer', 'dbi_example_plugin', 'mistplayer_settings' );
 }
 add_action( 'admin_init', 'dbi_register_settings' );
 
 function dbi_plugin_section_text() {
-    echo '<p>Here you can set common default values  for all your MistPlayer streams</p>';
-}
-function dbi_plugin_http_text() {
-  echo '<p>For example: example.com:8080 or example.com/mistserver</p>';
+  echo '<p style="color:grey;">Here you can set common default values  for all your MistPlayer streams</p>';
 }
 
 function dbi_plugin_setting_http() {
-    $options = get_option( 'mistplayer_defaults' );
-    echo "<label style='color:grey;'>http:// </label><input id='dbi_plugin_setting_http' name='mistplayer_defaults[http]' type='text' value='" . esc_attr( $options['http'] ) . "' required/>
-    <tr><td colspan=2 style='padding:0;'>For instance: example.com:8080 or example.com/mistserver</td></tr>";
+  $options = get_option( 'mistplayer_defaults' );
+  echo "<div style='display:flex;align-items:baseline;flex-row:no-wrap;width:30em;'><label style='color:grey;'>http:// </label><input style='flex-grow:1;' id='dbi_plugin_setting_http' name='mistplayer_defaults[http]' type='text' value='" . esc_attr( $options['http'] ) . "' required/></div>
+  <tr><td colspan=2 style='padding:0 0 1em;color:grey;'>For instance: <span style='color:black;'>example.com:8080 </span>or<span style='color:black'> example.com/mistserver</span></td></tr>";
 }
 
 function dbi_plugin_setting_https() {
-    $options = get_option( 'mistplayer_defaults' );
-    echo "<input id='dbi_plugin_setting_https' name='mistplayer_defaults[https]' type='text' value='" . esc_attr( $options['https'] ) . "' />";
+  $options = get_option( 'mistplayer_defaults' );
+  echo "<div style='display:flex;align-items:baseline;flex-row:no-wrap;width:30em;'><label style='color:grey;'>https:// </label><input style='flex-grow:1; id='dbi_plugin_setting_https' name='mistplayer_defaults[https]' type='text' value='" . esc_attr( $options['https'] ) . "'/></div>
+  <tr><td colspan=2 style='padding:0 0 1em;color:grey;'>For instance: <span style='color:black;'>example.com:4433</span> or <span style='color:black;'>example.com/mistserver</span>
+  <p>You can leave this field blank to default to the HTTP url, but the video might not play if it is viewed from an HTTPS connection.</p></td></tr>";
 }
 
 function dbi_plugin_setting_opts() {
   $options = get_option( 'mistplayer_defaults' );
-  echo "<input id='dbi_plugin_setting_opts' name='mistplayer_defaults[opts]' type='text' value='" . esc_attr( $options['opts'] ) . "' />";
+  echo "<textarea style='width:30em;' id='dbi_plugin_setting_opts' name='mistplayer_defaults[opts]' type='text' >" . esc_attr( $options['opts'] ) . "</textarea>
+  <tr><td colspan=2 style='padding:0 0 1em;color:grey;'>For instance: <span style='color:black;'>{width:300, muted:true}</span><p>  <span style='cursor:pointer;' title='
+   
+  autoplay: false,       (does not start playing when loaded)
+  controls: false,       (does not show controls (MistControls when available)
+  loop: true,          (loop when the stream has finished)
+  poster: true,        (show an image before the stream has started)
+  muted: true,         (start muted)
+  fillSpace: true,     (fill parent container)
+  width: 300,         (example of set width, default is false)
+  height: 300,        (example of set height, default is false)
+  maxwidth: 600,      (example max width (apart from targets dimensions)
+  maxheight: 600,     (example max height (apart from targets dimensions)
+  '>  Hover over for more options</span></p></td></tr>";
 }
 
 function dbi_plugin_setting_loadbalancer() {
   $options = get_option( 'mistplayer_defaults' );
-  echo "<input id='dbi_plugin_setting_loadbalancer' name='mistplayer_defaults[loadbalancer]' type='text' value='" . esc_attr( $options['loadbalancer'] ) . "' />";
+  echo "<input style='width:30em;' id='dbi_plugin_setting_loadbalancer' name='mistplayer_defaults[loadbalancer]' type='text' value='" . esc_attr( $options['loadbalancer'] ) . "'/>
+  <tr><td colspan=2 style='padding:0 0 1.5em;color:grey;'>For instance: <span style='color:black;'>http://hostname:8045</span></td></tr> ";
 }
-
 function mistplayer_shortcode($attr, $content = null){
   $default_info = get_option('mistplayer_defaults'); 
   // give info why the player is not dipslayed, in case not settings are defined
@@ -185,13 +198,5 @@ function mistplayer_shortcode($attr, $content = null){
 }
 
 add_shortcode('mistplayer', 'mistplayer_shortcode'); 
-
-
-// https://carlalexander.ca/wordpress-adventurous-options-api/
-// https://deliciousbrains.com/create-wordpress-plugin-settings-page/
-//https://github.com/DDVTECH/user_guideshttps://developer.wordpress.org/plugins/wordpress-org/how-your-readme-txt-works/
-
-
-// set default settings option in the dashboard 
 
 
