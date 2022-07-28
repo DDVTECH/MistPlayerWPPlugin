@@ -140,7 +140,8 @@ function mistplayer_shortcode($attr, $content = null){
             $arr_val = str_replace($temp[0], $data, $temp);
             $new_val = implode("/", $arr_val);
             $arr_hosts[$i] = $new_val;
-          }
+          }else{
+		  $arr_hosts[$i] = $data;
         }
       }
       $http = $arr_hosts[0];
