@@ -9,7 +9,7 @@ Requires PHP: 7.0
 License: Unlicense
 License URI: https://unlicense.org/
 
-MistPlayer is a MistServer Meta-Player which allows you to embed the fantastic, scalable and reliable MistServer Meta-Player (that connects to your MistServer instance) into your WordPress website.  MistServer is a full-featured, next-generation streaming media toolkit for OTT (internet streaming), designed to be ideal for developers and system integrators.
+MistPlayer is a MistServer Meta-Player which allows you to embed the highly-efficient, scalable and reliable MistServer Meta-Player (that connects to your MistServer instance) into your WordPress website.  MistServer is a full-featured, next-generation streaming media toolkit for OTT (internet streaming), designed to be ideal for developers and system integrators.
 
 == Description ==
 ???????
