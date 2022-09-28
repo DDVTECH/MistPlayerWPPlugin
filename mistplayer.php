@@ -6,14 +6,12 @@
 /*
 Plugin Name:  MistPlayer
 Plugin URI:   https://www.mistserver.org
-Description:  This plugin allows you to embed the fantastic, scalable and reliable MistServer Meta-Player (that connects to your MistServer instance) into your WordPress website.  MistServer is a full-featured, next-generation streaming media toolkit for OTT (internet streaming), designed to be ideal for developers and system integrators.
+Description:  This plugin allows you to embed the highly-efficient, scalable and reliable MistServer Meta-Player (that connects to your MistServer instance) into your WordPress website.  MistServer is a full-featured, next-generation streaming media toolkit for OTT (internet streaming), designed to be ideal for developers and system integrators.
 Version:      1.0
-Author:       MistServer team
+Author:       Petya Katsarova
 Author URI:   https://www.mistserver.org
 License:      Unlicense
 */
-// Make sure we don't expose any info if called directly
-
 
 if ( !function_exists( 'add_action' ) ) {
 	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
@@ -91,6 +89,7 @@ function dbi_plugin_setting_loadbalancer() {
   echo "<input style='width:30em;' id='dbi_plugin_setting_loadbalancer' name='mistplayer_defaults[loadbalancer]' type='text' value='" . esc_attr( $options['loadbalancer'] ) . "'/>
   <tr><td colspan=2 style='padding:0 0 1.5em;color:grey;'>For instance: <span style='color:black;'>http://hostname:8045</span></td></tr> ";
 }
+
 function mistplayer_shortcode($attr, $content = null){
   $default_info = get_option('mistplayer_defaults'); 
   // give info why the player is not dipslayed, in case not settings are defined
@@ -141,7 +140,8 @@ function mistplayer_shortcode($attr, $content = null){
             $new_val = implode("/", $arr_val);
             $arr_hosts[$i] = $new_val;
           }else{
-	    $arr_hosts[$i] = $data;
+	          $arr_hosts[$i] = $data;
+          }
         }
       }
       $http = $arr_hosts[0];
@@ -199,5 +199,3 @@ function mistplayer_shortcode($attr, $content = null){
 }
 
 add_shortcode('mistplayer', 'mistplayer_shortcode'); 
-
-

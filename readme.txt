@@ -47,8 +47,8 @@ Answer to foo bar dilemma.
 == Installation ==
 Steps: 
 
-1. Activate mistplayer plugin through the "Plugins" menu in WordPress dashboard.
-2. In your wp-admin page in dashboard->settings->MistPlayer default values can be set for all future or past posts. HTTP host value is required, the rest is optional. 
+1. Activate mistplayer plugin through the "Plugins" menu in WordPress dashboard
+2. In your wp-admin page(accessed through the url or simply clicking on dashboard from your username icon), go to settings->MistPlayer default values can be set for all future or past posts. HTTP host value is required, the rest is optional. 
 3. Setting up specific stream: You need to add your MistPlayer as a 'shortcode' element and there can set different individual settings. Stream name is required. Example [mistplayer stream="bunny"].
 Http value is required, as well, provided you haven't set it up in the wp-admin page(settings->MistPlayer). Example [mistplayer stream="bunny" http="mistserver.org"]
 Optional settings are https and opts: [mistplayer stream="bunny" http="name.org" https="mistserver.org" opts='{muted:true, width: 300}'] 
